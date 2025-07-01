@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supplier Control</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1>SUPPLIER CONTROL</h1>
+  </header>
+
+  <main>
+    <form id="supplierForm">
+      <p>1. Supplier:</p>
+      <label><input type="radio" name="supplier" value="PT. TENMA INDONESIA (RIT 1)"> PT. TENMA INDONESIA (RIT 1)</label><br>
+      <!-- Tambahkan pilihan supplier lainnya sesuai kebutuhan -->
+
+      <p>2. Pilih tanggal:</p>
+      <input type="date" name="tanggal" required /><br><br>
+
+      <p>3. Waktu IN:</p>
+      <input type="time" name="waktuIn" required /><br><br>
+
+      <p>4. Waktu OUT:</p>
+      <input type="time" name="waktuOut" required /><br><br>
+
+      <p>5. Keterangan:</p>
+      <input type="text" name="remark" placeholder="Keterangan" /><br><br>
+
+      <button type="submit">Kirim</button>
+    </form>
+  </main>
+
+  <script>
+    document.getElementById("supplierForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+
+      if (!formData.get("supplier")) {
+        alert("Pilih supplier terlebih dahulu.");
+        return;
+      }
+
+      fetch("https://script.google.com/macros/s/AKfycbwXraDnAUvGMcJmejdOH3tkQM0fNyX8VqJMj5hiTCYZWixUldL9Z961uzk03Gyj0rQZ/exec", {
+        method: "POST",
+        body: new URLSearchParams(formData)
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.status === "success") {
+          alert("Sukses: " + result.message);
+          form.reset();
+        } else {
+          alert("Gagal: " + result.message);
+        }
+      })
+      .catch(error => {
+        alert("Gagal terhubung: " + error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>
